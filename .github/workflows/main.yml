@@ -1,0 +1,27 @@
+name: HPC CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/singularity/singularity:v3.5.3
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Tests
+        run: /bin/bash .github/workflows/tests.sh
+#      - name: Install dependencies
+#        run: /bin/bash .github/workflows/setup.sh
+#      - name: Build image and send files
+#        env:
+#          RECIPE: ${{ secrets.RECIPE }}
+#          COLLECTION_CONTAINER: ${{ secrets.COLLECTION_CONTAINER }}
+#          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+#        run: /bin/bash .github/workflows/send.sh
