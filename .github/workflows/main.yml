@@ -1,18 +1,14 @@
 name: CI Grader
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: push
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+#      - uses: actions/checkout@v2
       - name: Tests
         run: /bin/bash .github/workflows/tests.sh
 #      - name: Install dependencies
