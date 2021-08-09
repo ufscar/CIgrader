@@ -1,4 +1,4 @@
-name: HPC CI
+name: CI Grader
 
 on:
   push:
@@ -10,8 +10,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    container:
-      image: quay.io/singularity/singularity:v3.5.3
 
     steps:
       - uses: actions/checkout@v2
