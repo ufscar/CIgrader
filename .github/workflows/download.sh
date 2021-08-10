@@ -1,4 +1,3 @@
 URL=${PROF_GITHUB}
-echo "${GITHUB_EVENT_NAME}"
 echo "${GITHUB_EVENT_PATH}"
-echo "${GITHUB_EVENT}"
+cat "${GITHUB_EVENT_PATH}"
