@@ -15,7 +15,11 @@ jobs:
       - name: Download Grader
         env:
           PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
-        run: /bin/bash .github/workflows/download.sh "${{ steps.files.outputs.added_modified }}"
+        run: |
+          mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
+          for added_modified_file in "${added_modified_files[@]}"; do
+            /bin/bash .github/workflows/download.sh "${added_modified_file}"
+          done
 #      - name: Install dependencies
 #        run: /bin/bash .github/workflows/setup.sh
 #      - name: Build image and send files
