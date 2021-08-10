@@ -12,7 +12,10 @@ jobs:
       - name: Download Grader
         env:
           PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
-        run: /bin/bash .github/workflows/download.sh
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: 'json'
+        run: /bin/bash .github/workflows/download.sh '${{ steps.files.outputs.added_modified }}'
 #      - name: Install dependencies
 #        run: /bin/bash .github/workflows/setup.sh
 #      - name: Build image and send files
