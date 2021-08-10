@@ -19,13 +19,5 @@ jobs:
         run: |
           readarray -t added_modified_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.added_modified }}')"
           for added_modified_file in "${added_modified_files[@]}"; do
-            /bin/bash .github/workflows/download.sh "${added_modified_file}"
+            echo "${added_modified_file}" | cut -d "/" -f1
           done
-#      - name: Install dependencies
-#        run: /bin/bash .github/workflows/setup.sh
-#      - name: Build image and send files
-#        env:
-#          RECIPE: ${{ secrets.RECIPE }}
-#          COLLECTION_CONTAINER: ${{ secrets.COLLECTION_CONTAINER }}
-#          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
-#        run: /bin/bash .github/workflows/send.sh
