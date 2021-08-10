@@ -9,8 +9,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Tests
-        run: /bin/bash .github/workflows/tests.sh
+      - name: Download Grader
+        env:
+          PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
+          EVENT: ${{ github.event }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_PATH: ${{ github.event_path }}
+        run: /bin/bash .github/workflows/download.sh
 #      - name: Install dependencies
 #        run: /bin/bash .github/workflows/setup.sh
 #      - name: Build image and send files

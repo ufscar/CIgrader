@@ -5,3 +5,7 @@ Corretor automático para laboratório de ensino baseado em CI
 
 1. Para cada lista, faça uma pasta com o nome da lista, como especificado pelo professor
 2. Dentro da pasta de uma determinada lista, ponha os exercícios conforme especificado pelo professor
+
+## Variáveis
+
+- **PROF_GITHUB**: Github do professor, onde serão fornecidos os executáveis corretores
