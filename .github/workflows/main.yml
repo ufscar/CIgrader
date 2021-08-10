@@ -16,7 +16,7 @@ jobs:
         env:
           PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
         run: |
-          readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.added_modified }}')"
+          readarray -t added_modified_file <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.added_modified }}')"
           for added_modified_file in "${added_modified_files[@]}"; do
             /bin/bash .github/workflows/download.sh "${added_modified_file}"
           done
