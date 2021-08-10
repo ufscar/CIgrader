@@ -1,4 +1,4 @@
-echo "${PROF_GITHUB}"
+curl "${PROF_GITHUB}" 2>/dev/null | grep lista
 
 #readarray -t added_modified_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.added_modified }}')"
 #for added_modified_file in "${added_modified_files[@]}"; do
