@@ -6,6 +6,8 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
+    env:
+      PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
 
     steps:
       - uses: actions/checkout@v2
@@ -13,7 +15,5 @@ jobs:
         id: files
         with:
           format: 'json'
-      - name: Download Grader
-        env:
-          PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
+      - name: Grader
         run: /bin/bash .github/workflows/grade.sh
