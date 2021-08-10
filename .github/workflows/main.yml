@@ -15,7 +15,7 @@ jobs:
         uses: jitterbit/get-changed-files@v1
         with:
           format: 'json'
-        run: /bin/bash .github/workflows/download.sh '${{ steps.files.outputs.added_modified }}'
+        run: /bin/bash .github/workflows/download.sh "${{ steps.files.outputs.added_modified }}"
 #      - name: Install dependencies
 #        run: /bin/bash .github/workflows/setup.sh
 #      - name: Build image and send files
