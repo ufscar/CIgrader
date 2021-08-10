@@ -1,4 +1,4 @@
 URL=${PROF_GITHUB}
-echo "${EVENT_NAME}"
-echo "${EVENT_PATH}"
-echo "${EVENT}"
+echo "${GITHUB_ACTION_NAME}"
+echo "${GITHUB_ACTION_PATH}"
+echo "${GITHUB_ACTION}"
