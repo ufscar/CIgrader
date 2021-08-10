@@ -10,6 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: jitterbit/get-changed-files@v1
+        id: files
         with:
           format: 'json'
       - name: Download Grader
