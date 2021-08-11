@@ -15,13 +15,17 @@ PROF_WORKS=$( curl "${CONTENTS}" 2>/dev/null | jq -r '.[] | select(.type == "dir
 #done;
 
 
-readarray -t added_modified_files <<< "$( echo "${COMMIT_FILES}" | jq -r .[] )"
+readarray -t added_modified_files < <( echo "${COMMIT_FILES[@]}" | jq -r .[] )
 for added_modified_file in "${added_modified_files[@]}";
 do
   work=$( echo "${added_modified_file}" | cut -d "/" -f1 );
+  echo "${work}";
+  if [[ "${work}" == ".github" ]];
+  then
+    continue;
+  fi;
   if [[ " ${PROF_WORKS[@]} " =~ " ${work} " ]];
   then
-    echo "${work}";
     grade=0;
     if [[ -z $( curl "${CONTENTS}/${work}" 2>/dev/null | jq -r '.[] | select(.name == "due_to.txt")' 2>/dev/null ) ]];
     then
