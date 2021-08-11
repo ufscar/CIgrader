@@ -28,7 +28,7 @@ for file in COMMIT_FILES:
         if 'due_to.txt' not in date_specs:
             grade = True
         date = base64.b64decode(requests.get(f'{CONTENTS}/{work}/due_to.txt').json()['content'])
-        date = dt2.strptime("%Y-%m-%dT%H:%M:%SZ", str(date, encoding='utf8'))
+        date = dt2.strptime(str(date, encoding='utf8'), "%Y-%m-%dT%H:%M:%SZ")
         if COMMIT_TIME <= date:
             grade = True
         print(grade)
