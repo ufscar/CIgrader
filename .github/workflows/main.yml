@@ -25,4 +25,5 @@ jobs:
       - name: Grader
         env:
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
+          COMMIT_FILES: ${{ steps.files.outputs.added_modified }}
         run: /bin/bash .github/workflows/grade.sh

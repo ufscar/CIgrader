@@ -3,7 +3,7 @@ URI=$( echo "${URL}" | sed "s,https://github.com/,,g" )
 CONTENTS="https://api.github.com/repos/${URI}/contents/"
 PROF_WORKS=$( curl "${CONTENTS}" 2>/dev/null | jq -r '.[] | select(.type == "dir") | .name' )
 
-echo "${COMMIT_TIME}"
+echo "${COMMIT_FILES}"
 exit 1
 
 #for work in "${AUX[@]}";
