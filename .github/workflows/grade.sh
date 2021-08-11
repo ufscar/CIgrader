@@ -31,7 +31,7 @@ echo "${PROF_WORKS}"
 #done;
 
 echo "==================================================="
-files=$( echo "${COMMIT_FILES[@]}" | jq -r .[] )
+readarray -t files < <( echo "${COMMIT_FILES[@]}" | jq -r .[] )
 for added_modified_file in "${files[@]}";
 do
   work=$( echo "${added_modified_file}" | cut -d "/" -f1 );
