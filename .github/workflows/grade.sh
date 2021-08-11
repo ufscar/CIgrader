@@ -1,15 +1,13 @@
 array_contains () {
     local seeking=$1; shift
-    local in="0"
     for element; do
         echo "\"$element\" == \"$seeking\" "
         if [[ $element == "$seeking" ]];
         then
-            in="1"
-            break
+            return 1;
         fi
     done
-    return $in
+    return 0;
 }
 
 URL="${PROF_GITHUB}"
