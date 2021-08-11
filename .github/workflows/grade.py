@@ -1,3 +1,4 @@
+import re
 import os
 import requests
 import json
@@ -28,7 +29,12 @@ for file in COMMIT_FILES:
         if 'due_to.txt' not in date_specs:
             grade = True
         date = base64.b64decode(requests.get(f'{CONTENTS}/{work}/due_to.txt').json()['content'])
-        date = dt2.strptime(str(date, encoding='utf8'), "%Y-%m-%dT%H:%M:%SZ")
-        if COMMIT_TIME <= date:
-            grade = True
+        date = str(date, encoding='utf8')
+        date = re.search(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', date)
+        if not date:
+            grade = False
+        else:
+            date = dt2.strptime(date.group(0), "%Y-%m-%dT%H:%M:%S")
+            if COMMIT_TIME <= date:
+                grade = True
         print(grade)
