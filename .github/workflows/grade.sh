@@ -27,7 +27,7 @@ PROF_WORKS=$( curl "${CONTENTS}" 2>/dev/null | jq -r '.[] | select(.type == "dir
 #  fi;
 #done;
 
-teste="${COMMIT_FILES[@]}"
+teste="${COMMIT_FILES[*]}"
 echo "${teste}"
 teste=$( echo "${COMMIT_FILES[@]}" | jq -r .[] )
 echo "${teste}"
