@@ -2,7 +2,7 @@ array_contains () {
     local seeking=$1; shift
     local in=0
     for element; do
-        echo "\"$element\" == \"$seeking\""
+        echo "\"$element\" == \"$seeking\" "
         if [[ $element == "$seeking" ]];
         then
             in=1
@@ -30,12 +30,13 @@ echo "${PROF_WORKS}"
 #  fi;
 #done;
 
-
+echo "==================================================="
 files=$( echo "${COMMIT_FILES[@]}" | jq -r .[] )
 for added_modified_file in "${files[@]}";
 do
   work=$( echo "${added_modified_file}" | cut -d "/" -f1 );
   echo "${work}";
+  echo " \"${work}\" == \".github\" ";
   if [[ "${work}" == ".github" ]];
   then
     continue;
