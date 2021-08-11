@@ -1,11 +1,11 @@
 array_contains () {
     local seeking=$1; shift
-    local in=0
+    local in="0"
     for element; do
         echo "\"$element\" == \"$seeking\" "
         if [[ $element == "$seeking" ]];
         then
-            in=1
+            in="1"
             break
         fi
     done
@@ -35,17 +35,17 @@ readarray -t files < <( echo "${COMMIT_FILES[@]}" | jq -r .[] )
 for added_modified_file in "${files[@]}";
 do
   work=$( echo "${added_modified_file}" | cut -d "/" -f1 );
-  echo "${work}";
-  echo " \"${work}\" == \".github\" ";
+#  echo "${work}";
+#  echo " \"${work}\" == \".github\" ";
   if [[ "${work}" == ".github" ]];
   then
     continue;
   fi;
   to_grade=$( array_contains "${work}" "${PROF_WORKS[@]}" )
-  echo "GRADE? ${to_grade}"
+  echo "${to_grade}"
   if [[ "${to_grade}" == "1" ]];
   then
-    echo "GRADE? 1";
+#    echo "GRADE? 1";
     grade=0;
     date_specs=$( curl "${CONTENTS}/${work}" 2>/dev/null | jq -r '.[] | select(.name == "due_to.txt")' 2>/dev/null )
     if [[ -z ${date_specs} ]];
