@@ -14,7 +14,7 @@ COMMIT_TIME = os.getenv('COMMIT_TIME')
 if COMMIT_TIME is None:
     COMMIT_TIME = dt2.now()
 else:
-    COMMIT_TIME = dt2.strptime("%Y-%m-%dT%H:%M:%S", json.loads(COMMIT_TIME).strip('Z'))
+    COMMIT_TIME = dt2.strptime(json.loads(COMMIT_TIME), "%Y-%m-%dT%H:%M:%SZ")
 
 for file in COMMIT_FILES:
     work = file.split('/')[0]
