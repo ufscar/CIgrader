@@ -1,10 +1,7 @@
-URL="https://github.com/ufscar/CIgrader-professor" # "${PROF_GITHUB}"
+URL="${PROF_GITHUB}"
 URI=$( echo "${URL}" | sed "s,https://github.com/,,g" )
 CONTENTS="https://api.github.com/repos/${URI}/contents/"
 PROF_WORKS=$( curl "${CONTENTS}" 2>/dev/null | jq -r '.[] | select(.type == "dir") | .name' )
-
-echo "${COMMIT_FILES}"
-exit 1
 
 #for work in "${AUX[@]}";
 #do
@@ -18,12 +15,13 @@ exit 1
 #done;
 
 
-readarray -t added_modified_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.added_modified }}')"
+readarray -t added_modified_files <<< "$( echo "${COMMIT_FILES}" | jq -r .[] )"
 for added_modified_file in "${added_modified_files[@]}";
 do
-  work=$( echo "${added_modified_file}" | cut -d "/" -f1 )
+  work=$( echo "${added_modified_file}" | cut -d "/" -f1 );
   if [[ " ${PROF_WORKS[@]} " =~ " ${work} " ]];
   then
+    echo "${work}";
     grade=0;
     if [[ -z $( curl "${CONTENTS}/${work}" 2>/dev/null | jq -r '.[] | select(.name == "due_to.txt")' 2>/dev/null ) ]];
     then
