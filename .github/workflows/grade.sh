@@ -26,17 +26,11 @@ PROF_WORKS=$( curl "${CONTENTS}" 2>/dev/null | jq -r '.[] | select(.type == "dir
 #
 #  fi;
 #done;
-
-teste="${COMMIT_FILES[*]}"
-echo "${teste}"
-teste=$( echo "${COMMIT_FILES[@]}" | jq -r .[] )
-echo "${teste}"
-teste=$( echo "${COMMIT_FILES[@]}" | jq -r .[] | readarray -t added_modified_files - )
-echo "${teste}"
-exit 1
-for added_modified_file in "${added_modified_files[@]}";
+files=$( echo "${COMMIT_FILES[@]}" | jq -r .[] )
+for added_modified_file in "${files[@]}";
 do
   work=$( echo "${added_modified_file}" | cut -d "/" -f1 );
+  echo "${work}";
   if [[ "${work}" == ".github" ]];
   then
     continue;
