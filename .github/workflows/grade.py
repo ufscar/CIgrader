@@ -9,12 +9,12 @@ URL = os.getenv('PROF_GITHUB')
 URI = URL.replace('https://github.com/', '')
 CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
-COMMIT_FILES = json.loads(os.getenv('COMMIT_FILES'))
+COMMIT_FILES = json.loads(os.getenv('COMMIT_FILES', "[]"))
 COMMIT_TIME = os.getenv('COMMIT_TIME')
 if COMMIT_TIME is None:
     COMMIT_TIME = dt2.now()
 else:
-    COMMIT_TIME = dt2.strptime("%Y-%m-%dT%H:%M:%SZ", COMMIT_TIME)
+    COMMIT_TIME = dt2.strptime("%Y-%m-%dT%H:%M:%SZ", json.loads(COMMIT_TIME))
 
 for file in COMMIT_FILES:
     work = file.split('/')[0]
