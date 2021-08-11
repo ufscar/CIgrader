@@ -2,6 +2,7 @@ array_contains () {
     local seeking=$1; shift
     local in=0
     for element; do
+      echo $element
         if [[ $element == "$seeking" ]];
         then
             in=1
