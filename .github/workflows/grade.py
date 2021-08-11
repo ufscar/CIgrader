@@ -37,4 +37,5 @@ for file in COMMIT_FILES:
             date = dt2.strptime(date.group(0), "%Y-%m-%dT%H:%M:%S")
             if COMMIT_TIME <= date:
                 grade = True
+
     print(grade)
