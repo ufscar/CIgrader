@@ -1,39 +1,34 @@
 import os
 import requests
+import json
+import base64
+
+from datetime import datetime as dt2
 
 URL = os.getenv('PROF_GITHUB')
 URI = URL.replace('https://github.com/', '')
 CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
-COMMIT_FILES = os.getenv('COMMIT_FILES')
-print(COMMIT_FILES, type(COMMIT_FILES))
+COMMIT_FILES = json.loads(os.getenv('COMMIT_FILES'))
+COMMIT_TIME = os.getenv('COMMIT_TIME')
+if COMMIT_TIME is None:
+    COMMIT_TIME = dt2.now()
+else:
+    COMMIT_TIME = dt2.strptime("%Y-%m-%dT%H:%M:%SZ", COMMIT_TIME)
 
-# for added_modified_file in "${files[@]}";
-# do
-#   work=$( echo "${added_modified_file}" | cut -d "/" -f1 );
-# #  echo "${work}";
-# #  echo " \"${work}\" == \".github\" ";
-#   if [[ "${work}" == ".github" ]];
-#   then
-#     continue;
-#   fi;
-#   to_grade=$( array_contains "${work}" "${PROF_WORKS[@]}" )
-#   echo "${to_grade}"
-#   if [[ "${to_grade}" == "1" ]];
-#   then
-# #    echo "GRADE? 1";
-#     grade=0;
-#     date_specs=$( curl "${CONTENTS}/${work}" 2>/dev/null | jq -r '.[] | select(.name == "due_to.txt")' 2>/dev/null )
-#     if [[ -z ${date_specs} ]];
-#     then
-#       grade=1;
-#     else
-#       date=$( date +"$( curl "${CONTENTS}/${work}/due_to.txt" 2>/dev/null | jq -r .content | base64 -d - )" )
-#       if [[ ${date} < ${COMMIT_TIME} ]];
-#       then
-#         grade=1;
-#       fi;
-#     fi;
-#   fi;
-#   echo ${grade};
-# done
+for file in COMMIT_FILES:
+    work = file.split('/')[0]
+    if work == ".github":
+        continue
+    print(work)
+    if work in PROF_WORKS:
+        print(f'GRADE: 1')
+        grade = False
+        date_specs = [r['name'] for r in requests.get(f'{CONTENTS}/{work}').json()]
+        if 'due_to.txt' not in date_specs:
+            grade = True
+        date = base64.b64decode(requests.get(f'{CONTENTS}/{work}/due_to.txt').json()['content'])
+        date = dt2.strptime("%Y-%m-%dT%H:%M:%SZ", str(date, encoding='utf8'))
+        if COMMIT_TIME <= date:
+            grade = True
+        print(grade)
