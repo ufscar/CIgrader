@@ -26,6 +26,7 @@ for file in COMMIT_FILES:
         continue
     grade = False
     date_specs = [r['name'] for r in requests.get(f'{CONTENTS}/{work}').json()]
+    print(date_specs)
     if 'due_to.txt' not in date_specs:
         grade = True
     else:
