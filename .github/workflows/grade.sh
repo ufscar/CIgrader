@@ -2,7 +2,7 @@ URL="https://github.com/ufscar/CIgrader-professor" # "${PROF_GITHUB}"
 URI=$( echo "${URL}" | sed "s,https://github.com/,,g" )
 CONTENTS="https://api.github.com/repos/${URI}/contents/"
 PROF_WORKS=$( curl "${CONTENTS}" 2>/dev/null | jq -r '.[] | select(.type == "dir") | .name' )
-COMMIT_TIME="${{ steps.author-date.outputs.result }}"
+
 echo "${COMMIT_TIME}"
 exit 1
 
