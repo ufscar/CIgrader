@@ -23,18 +23,17 @@ for file in COMMIT_FILES:
         continue
     print(work)
     if work in PROF_WORKS:
-        print(f'GRADE: 1')
         grade = False
         date_specs = [r['name'] for r in requests.get(f'{CONTENTS}/{work}').json()]
         if 'due_to.txt' not in date_specs:
             grade = True
-        date = base64.b64decode(requests.get(f'{CONTENTS}/{work}/due_to.txt').json()['content'])
-        date = str(date, encoding='utf8')
-        date = re.search(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', date)
-        if not date:
-            grade = False
         else:
-            date = dt2.strptime(date.group(0), "%Y-%m-%dT%H:%M:%S")
-            if COMMIT_TIME <= date:
-                grade = True
+            date = base64.b64decode(requests.get(f'{CONTENTS}/{work}/due_to.txt').json()['content'])
+            date = re.search(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', str(date, encoding='utf8'))
+            if not date:
+                grade = False
+            else:
+                date = dt2.strptime(date.group(0), "%Y-%m-%dT%H:%M:%S")
+                if COMMIT_TIME <= date:
+                    grade = True
         print(grade)
