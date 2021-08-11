@@ -1,3 +1,16 @@
+array_contains () {
+    local seeking=$1; shift
+    local in=0
+    for element; do
+        if [[ $element == "$seeking" ]];
+        then
+            in=1
+            break
+        fi
+    done
+    return $in
+}
+
 URL="${PROF_GITHUB}"
 URI=$( echo "${URL}" | sed "s,https://github.com/,,g" )
 CONTENTS="https://api.github.com/repos/${URI}/contents/"
@@ -19,13 +32,13 @@ readarray -t added_modified_files < <( echo "${COMMIT_FILES[@]}" | jq -r .[] )
 for added_modified_file in "${added_modified_files[@]}";
 do
   work=$( echo "${added_modified_file}" | cut -d "/" -f1 );
-  echo "${work}";
   if [[ "${work}" == ".github" ]];
   then
     continue;
   fi;
-  if [[ " ${PROF_WORKS[@]} " =~ " ${work} " ]];
+  if [[ $( array_contains "${work}" "${PROF_WORKS[@]}" ) == 1 ]];
   then
+    echo "${work}";
     grade=0;
     if [[ -z $( curl "${CONTENTS}/${work}" 2>/dev/null | jq -r '.[] | select(.name == "due_to.txt")' 2>/dev/null ) ]];
     then
@@ -38,4 +51,5 @@ do
       fi;
     fi;
   fi;
+  echo ${grade};
 done
