@@ -6,9 +6,9 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
-    container:
-      image: python:3.9.6-slim-buster
-      options: --privileged
+#    container:
+#      image: python:3.9.6-slim-buster
+#      options: --privileged
     env:
       PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
 
@@ -27,7 +27,9 @@ jobs:
             return commit_details.data.author.date
       - name: Setup
         run: |
-          /usr/local/bin/python3 -m pip install requests
+          ldd --version
+          apt-get update && apt-get install libc6
+          ldd --version
       - name: Grader
         env:
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
