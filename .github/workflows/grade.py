@@ -18,6 +18,7 @@ if COMMIT_TIME is None:
 else:
     COMMIT_TIME = dt2.strptime(json.loads(COMMIT_TIME), "%Y-%m-%dT%H:%M:%SZ")
 commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
+GRADER_EXEC = 'grader'
 
 graded = set()
 for file in COMMIT_FILES:
@@ -44,8 +45,9 @@ for file in COMMIT_FILES:
         continue
     curr = os.getcwd()
     os.chdir(work)
-    urllib.request.urlretrieve(list(prof_files.values())[0], 'grader')
-    result = subprocess.run('./grader 2>&1'.split(), capture_output=True)
+    urllib.request.urlretrieve(list(prof_files.values())[0], GRADER_EXEC)
+    os.chmod(GRADER_EXEC, 777)
+    result = subprocess.run([f'./{GRADER_EXEC}', '2>&1'], capture_output=True)
     with open(f'grader_{commit_time_string}.txt', 'wb') as log_file:
         log_file.write(result.stdout)
     print(result.stdout)
