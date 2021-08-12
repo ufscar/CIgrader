@@ -2,7 +2,8 @@ import re
 import os
 import requests
 import json
-import base64
+import urllib.request
+import subprocess
 
 from datetime import datetime as dt2
 
@@ -16,27 +17,39 @@ if COMMIT_TIME is None:
     COMMIT_TIME = dt2.now()
 else:
     COMMIT_TIME = dt2.strptime(json.loads(COMMIT_TIME), "%Y-%m-%dT%H:%M:%SZ")
+commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 
+graded = set()
 for file in COMMIT_FILES:
     work = file.split('/')[0]
     if work == ".github":
         continue
-    print(work)
+    if work in graded:
+        continue
+    graded.add(work)
     if work not in PROF_WORKS:
         continue
-    grade = False
-    date_specs = [r['name'] for r in requests.get(f'{CONTENTS}/{work}').json()]
-    print(date_specs)
-    if 'due_to.txt' not in date_specs:
-        grade = True
-    else:
-        date = base64.b64decode(requests.get(f'{CONTENTS}/{work}/due_to.txt').json()['content'])
+    prof_files = {r['name']: r["download_url"] for r in requests.get(f'{CONTENTS}/{work}').json()}
+    if 'due_to.txt' in prof_files:
+        date = requests.get(prof_files['due_to.txt']).content
         date = re.search(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', str(date, encoding='utf8'))
-        if not date:
-            grade = False
-        else:
+        del prof_files['due_to.txt']
+        if date:
             date = dt2.strptime(date.group(0), "%Y-%m-%dT%H:%M:%S")
-            if COMMIT_TIME <= date:
-                grade = True
+            if COMMIT_TIME > date:
+                continue
+    print(f'TASK: {work}')
+    if len(prof_files) != 1:
+        print('ERROR: invalid number of grader files (warn your professor)')
+        continue
+    curr = os.getcwd()
+    os.chdir(work)
+    urllib.request.urlretrieve(list(prof_files.values())[0], 'grader')
+    result = subprocess.run('./grader 2>&1'.split(), capture_output=True)
+    with open(f'grader_{commit_time_string}.txt', 'wb') as log_file:
+        log_file.write(result.stdout)
+    print(result.stdout)
+    os.remove('grader')
 
-    print(grade)
+
+
