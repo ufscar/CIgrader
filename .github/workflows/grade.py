@@ -22,6 +22,7 @@ commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
 
 graded = set()
+scores = list()
 for file in COMMIT_FILES:
     work = file.split('/')[0]
     if work == ".github":
@@ -50,8 +51,14 @@ for file in COMMIT_FILES:
     os.chmod(GRADER_EXEC, stat.S_IRWXU)
     os.system(f'./{GRADER_EXEC} > grader_{commit_time_string}.txt 2>&1')
     with open(f'grader_{commit_time_string}.txt', 'r') as log_file:
-        print(log_file.read())
+        log = log_file.read()
     os.remove('grader')
+    print(log)
+    score = json.loads(log.strip().splitlines()[-1])
+    score['task'] = work
+    scores.append(score)
+
+print(json.dumps(scores))
 
 
 
