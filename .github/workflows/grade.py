@@ -48,7 +48,6 @@ for file in COMMIT_FILES:
     os.chdir(work)
     urllib.request.urlretrieve(list(prof_files.values())[0], GRADER_EXEC)
     os.chmod(GRADER_EXEC, stat.S_IRWXU)
-    os.system('find /tmp -name "libpython*"')
     os.system(f'./{GRADER_EXEC} > grader_{commit_time_string}.txt 2>&1')
     with open(f'grader_{commit_time_string}.txt', 'r') as log_file:
         print(log_file.read())

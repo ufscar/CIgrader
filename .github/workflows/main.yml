@@ -6,6 +6,9 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
+    container:
+      image: python:3.9.6-slim-buster
+      options: --privileged
     env:
       PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
 
