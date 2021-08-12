@@ -27,10 +27,9 @@ jobs:
             return commit_details.data.author.date
       - name: Setup
         run: |
-          whereis python
-          ldd --version
-          apt-get update && apt-get install libc6
-          ldd --version
+          which python
+          which python3
+          apt-get update && apt-get install python3
       - name: Grader
         env:
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
