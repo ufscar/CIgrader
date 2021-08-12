@@ -21,7 +21,7 @@ else:
 commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
 
-print(f'PROFESSOR GIT: {URL}')
+print(f'PROFESSOR GITHUB: {URI}')
 
 graded = set()
 scores = list()
