@@ -47,13 +47,10 @@ for file in COMMIT_FILES:
     curr = os.getcwd()
     os.chdir(work)
     urllib.request.urlretrieve(list(prof_files.values())[0], GRADER_EXEC)
-    os.system('ls -lh')
     os.chmod(GRADER_EXEC, stat.S_IRWXU)
-    os.system('ls -lh')
-    result = subprocess.run([f'./{GRADER_EXEC}', '2>&1'], capture_output=True)
-    with open(f'grader_{commit_time_string}.txt', 'wb') as log_file:
-        log_file.write(result.stdout)
-    print(result.stdout)
+    subprocess.run(f'./{GRADER_EXEC} > grader_{commit_time_string}.txt 2>&1'.split())
+    with open(f'grader_{commit_time_string}.txt', 'r') as log_file:
+        print(log_file.read())
     os.remove('grader')
 
 
