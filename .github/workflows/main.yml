@@ -25,6 +25,9 @@ jobs:
           script: |
             const commit_details = await github.git.getCommit({owner: context.repo.owner, repo: context.repo.repo, commit_sha: context.sha});
             return commit_details.data.author.date
+      - name: Setup
+        run: |
+          /usr/local/bin/python3 -m pip install requests
       - name: Grader
         env:
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
