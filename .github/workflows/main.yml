@@ -29,7 +29,4 @@ jobs:
         env:
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
           COMMIT_FILES: ${{ steps.files.outputs.added_modified }}
-        run:  |
-          which python
-          which python3
-          /usr/bin/python3 .github/workflows/grade.py
+        run: /usr/local/bin/python3 .github/workflows/grade.py
