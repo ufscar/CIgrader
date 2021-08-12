@@ -46,7 +46,8 @@ for file in COMMIT_FILES:
     curr = os.getcwd()
     os.chdir(work)
     urllib.request.urlretrieve(list(prof_files.values())[0], GRADER_EXEC)
-    os.chmod(GRADER_EXEC, 777)
+    # os.chmod(GRADER_EXEC, 777)
+    os.system(f'git update-index --chmod=+x ./{GRADER_EXEC}')
     result = subprocess.run([f'./{GRADER_EXEC}', '2>&1'], capture_output=True)
     with open(f'grader_{commit_time_string}.txt', 'wb') as log_file:
         log_file.write(result.stdout)
