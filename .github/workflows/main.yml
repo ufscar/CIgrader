@@ -7,7 +7,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:latest
+      image: archlinux:latest
       options: --privileged
     env:
       PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
@@ -27,6 +27,8 @@ jobs:
             return commit_details.data.author.date
       - name: Setup
         run: |
+          python --version
+          python3 --version
           ldd --version
           apt-get update && apt-get install libc6
           ldd --version
