@@ -26,9 +26,9 @@ jobs:
             const commit_details = await github.git.getCommit({owner: context.repo.owner, repo: context.repo.repo, commit_sha: context.sha});
             return commit_details.data.author.date
       - name: Setup
-        run: apt-get -y update && apt-get -y install python3 && which python3 && which python
+        run: apt-get -y update && apt-get -y install python3
       - name: Grader
         env:
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
           COMMIT_FILES: ${{ steps.files.outputs.added_modified }}
-        run: /bin/python3 .github/workflows/grade.py
+        run: /usr/bin/python3 .github/workflows/grade.py
