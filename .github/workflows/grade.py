@@ -57,6 +57,7 @@ for file in COMMIT_FILES:
     score = json.loads(log.strip().splitlines()[-1])
     score['task'] = work
     scores.append(score)
+    os.chdir(curr)
 
 print(json.dumps(scores))
 
