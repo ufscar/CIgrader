@@ -21,6 +21,8 @@ else:
 commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
 
+print(f'PROFESSOR GIT: {URL}')
+
 graded = set()
 scores = list()
 for file in COMMIT_FILES:
@@ -52,7 +54,7 @@ for file in COMMIT_FILES:
     os.system(f'./{GRADER_EXEC} > grader_{commit_time_string}.txt 2>&1')
     with open(f'grader_{commit_time_string}.txt', 'r') as log_file:
         log = log_file.read()
-    os.remove('grader')
+    os.remove(GRADER_EXEC)
     print(log)
     score = json.loads(log.strip().splitlines()[-1])
     score['task'] = work
