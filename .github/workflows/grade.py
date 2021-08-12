@@ -48,7 +48,7 @@ for file in COMMIT_FILES:
     os.chdir(work)
     urllib.request.urlretrieve(list(prof_files.values())[0], GRADER_EXEC)
     os.system('ls -lh')
-    os.chmod(GRADER_EXEC, stat.S_IEXEC)
+    os.chmod(GRADER_EXEC, stat.S_IRWXU)
     os.system('ls -lh')
     result = subprocess.run([f'./{GRADER_EXEC}', '2>&1'], capture_output=True)
     with open(f'grader_{commit_time_string}.txt', 'wb') as log_file:
