@@ -27,7 +27,7 @@ repository = git.repository(OWNER, REPO)
 
 PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
 print(PROF_WORKS)
-PROF_WORKS = repository.contents
+PROF_WORKS = repository.as_dict()
 print(PROF_WORKS)
 exit(1)
 
