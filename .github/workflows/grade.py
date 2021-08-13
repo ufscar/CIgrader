@@ -25,7 +25,7 @@ URI = URL.replace('https://github.com/', '')
 CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
-GRADER_FOLDER = 'grader'
+GRADER_FOLDER = 'comments'
 DATE_FILE = 'due_to.txt'
 SCORE_FILE = f'current_score.txt'
 
@@ -74,7 +74,6 @@ for file in COMMIT_FILES:
                      content=log
                      )
     log = str(log, encoding='utf8')
-    print(log)
     score = log.strip().splitlines()[-1]
     score_file = os.path.join(work, GRADER_FOLDER, SCORE_FILE)
     contents = repo.file_contents(path=score_file)
