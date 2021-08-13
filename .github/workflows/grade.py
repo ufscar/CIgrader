@@ -65,8 +65,8 @@ for file in COMMIT_FILES:
     os.chmod(GRADER_EXEC, stat.S_IRWXU)
     log_file = f'{commit_time_string}.txt'
     log = subprocess.run([f'./{GRADER_EXEC}'],
-                         stderr=subprocess.STDOUT,
-                         capture_output=True).stdout
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT).stdout
     print(log)
     os.remove(GRADER_EXEC)
     repo.create_file(path=os.path.join(work, GRADER_FOLDER, log_file),
