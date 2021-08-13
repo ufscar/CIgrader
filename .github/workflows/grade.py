@@ -1,8 +1,8 @@
 import re
 import os
 import stat
-import json
 import requests
+import json
 import urllib.request
 import github3
 
@@ -10,9 +10,10 @@ from datetime import datetime as dt2
 
 URL = os.getenv('PROF_GITHUB')
 URI = URL.replace('https://github.com/', '')
-OWNER, REPO = URI.split('/')
 CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
+GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
+GITHUB_ACTOR = os.getenv('GITHUB_ACTOR')
 COMMIT_FILES = json.loads(os.getenv('COMMIT_FILES', "[]"))
 COMMIT_TIME = os.getenv('COMMIT_TIME')
 if COMMIT_TIME is None:
@@ -24,9 +25,10 @@ GRADER_EXEC = 'grader'
 DATE_FILE = 'due_to.txt'
 
 git = github3.GitHub(token=GITHUB_TOKEN)
-repo = git.repository(OWNER, REPO)
 
-PROF_WORKS = [f[0] for f in repo.directory_contents('') if f[1].type == 'dir']
+PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
+print(GITHUB_REPOSITORY, GITHUB_ACTOR)
+exit(1)
 
 print(f'PROFESSOR GITHUB: {URI}')
 
@@ -41,11 +43,9 @@ for file in COMMIT_FILES:
     graded.add(work)
     if work not in PROF_WORKS:
         continue
-    prof_files = dict(repo.directory_contents(work))
-    print(prof_files)
-    exit(1)
+    prof_files = {r['name']: r["download_url"] for r in requests.get(f'{CONTENTS}/{work}').json()}
     if DATE_FILE in prof_files:
-        date = repo.file_contents(prof_files[DATE_FILE]).content
+        date = requests.get(prof_files[DATE_FILE]).content
         date = re.search(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', str(date, encoding='utf8'))
         del prof_files[DATE_FILE]
         if date:

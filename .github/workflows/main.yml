@@ -35,6 +35,8 @@ jobs:
       - name: Grader
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
+          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
           COMMIT_FILES: ${{ steps.files.outputs.added_modified }}
         run: /usr/bin/python3 .github/workflows/grade.py
