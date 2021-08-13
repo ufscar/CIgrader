@@ -73,6 +73,7 @@ for file in COMMIT_FILES:
                      content=log
                      )
     log = str(log, encoding='utf8')
+    print(log)
     score = log.strip().splitlines()[-1]
     score_file = os.path.join(GRADER_FOLDER, f'{work}_current_score.txt')
     try:
