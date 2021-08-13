@@ -30,6 +30,7 @@ DATE_FILE = 'due_to.txt'
 
 git = github3.GitHub(token=GITHUB_TOKEN)
 repo = git.repository(GITHUB_REPOSITORY_OWNER, GITHUB_REPOSITORY_NAME)
+print(repo.as_dict())
 
 PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
 
@@ -71,7 +72,6 @@ for file in COMMIT_FILES:
                      content=log
                      )
     log = str(log, encoding='utf8')
-    print(log)
     score = json.loads(log.strip().splitlines()[-1])
     score['task'] = work
     scores.append(score)
