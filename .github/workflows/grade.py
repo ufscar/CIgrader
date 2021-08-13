@@ -5,14 +5,13 @@ import requests
 import json
 import urllib.request
 import github3
+import subprocess
 
 from datetime import datetime as dt2
 
-URL = os.getenv('PROF_GITHUB')
-URI = URL.replace('https://github.com/', '')
-CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
+GITHUB_REPOSITORY_OWNER, GITHUB_REPOSITORY_NAME = GITHUB_REPOSITORY.split('/')
 GITHUB_ACTOR = os.getenv('GITHUB_ACTOR')
 COMMIT_FILES = json.loads(os.getenv('COMMIT_FILES', "[]"))
 COMMIT_TIME = os.getenv('COMMIT_TIME')
@@ -20,15 +19,19 @@ if COMMIT_TIME is None:
     COMMIT_TIME = dt2.now()
 else:
     COMMIT_TIME = dt2.strptime(json.loads(COMMIT_TIME), "%Y-%m-%dT%H:%M:%SZ")
+
+URL = os.getenv('PROF_GITHUB')
+URI = URL.replace('https://github.com/', '')
+CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
+GRADER_FOLDER = 'grader'
 DATE_FILE = 'due_to.txt'
 
 git = github3.GitHub(token=GITHUB_TOKEN)
+repo = git.repository(GITHUB_REPOSITORY_OWNER, GITHUB_REPOSITORY_NAME)
 
 PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
-print(GITHUB_REPOSITORY, GITHUB_ACTOR)
-exit(1)
 
 print(f'PROFESSOR GITHUB: {URI}')
 
@@ -60,10 +63,14 @@ for file in COMMIT_FILES:
     os.chdir(work)
     urllib.request.urlretrieve(list(prof_files.values())[0], GRADER_EXEC)
     os.chmod(GRADER_EXEC, stat.S_IRWXU)
-    os.system(f'./{GRADER_EXEC} > grader_{commit_time_string}.txt 2>&1')
-    with open(f'grader_{commit_time_string}.txt', 'r') as log_file:
-        log = log_file.read()
+    log_file = f'{commit_time_string}.txt'
+    log = subprocess.run([f'./{GRADER_EXEC}'], stderr=subprocess.STDOUT).stdout
     os.remove(GRADER_EXEC)
+    repo.create_file(path=os.path.join(work, GRADER_FOLDER, log_file),
+                     message=f'task "{work}" grader',
+                     content=log
+                     )
+    log = str(log, encoding='utf8')
     print(log)
     score = json.loads(log.strip().splitlines()[-1])
     score['task'] = work
