@@ -30,7 +30,6 @@ DATE_FILE = 'due_to.txt'
 
 git = github3.GitHub(token=GITHUB_TOKEN)
 repo = git.repository(GITHUB_REPOSITORY_OWNER, GITHUB_REPOSITORY_NAME)
-print(repo.as_dict())
 
 PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
 
@@ -66,12 +65,15 @@ for file in COMMIT_FILES:
     os.chmod(GRADER_EXEC, stat.S_IRWXU)
     log_file = f'{commit_time_string}.txt'
     log = subprocess.run([f'./{GRADER_EXEC}'], stderr=subprocess.STDOUT).stdout
+    print(log)
     os.remove(GRADER_EXEC)
     repo.create_file(path=os.path.join(work, GRADER_FOLDER, log_file),
                      message=f'task "{work}" grader',
                      content=log
                      )
-    log = str(log, encoding='utf8')
+    print(log)
+    exit(1)
+    # log = str(log, encoding='utf8')
     score = json.loads(log.strip().splitlines()[-1])
     score['task'] = work
     scores.append(score)
