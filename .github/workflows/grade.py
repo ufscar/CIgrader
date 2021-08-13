@@ -2,6 +2,7 @@ import re
 import os
 import stat
 import json
+import requests
 import urllib.request
 import github3
 
@@ -20,6 +21,7 @@ else:
     COMMIT_TIME = dt2.strptime(json.loads(COMMIT_TIME), "%Y-%m-%dT%H:%M:%SZ")
 commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
+DATE_FILE = 'due_to.txt'
 
 git = github3.GitHub(token=GITHUB_TOKEN)
 repo = git.repository(OWNER, REPO)
@@ -39,13 +41,13 @@ for file in COMMIT_FILES:
     graded.add(work)
     if work not in PROF_WORKS:
         continue
-    prof_files = {f[0]: f[1].download_url for f in repo.directory_contents(work)}
+    prof_files = dict(repo.directory_contents(work))
     print(prof_files)
     exit(1)
-    if 'due_to.txt' in prof_files:
-        date = requests.get(prof_files['due_to.txt']).content
+    if DATE_FILE in prof_files:
+        date = repo.file_contents(prof_files[DATE_FILE]).content
         date = re.search(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', str(date, encoding='utf8'))
-        del prof_files['due_to.txt']
+        del prof_files[DATE_FILE]
         if date:
             date = dt2.strptime(date.group(0), "%Y-%m-%dT%H:%M:%S")
             if COMMIT_TIME > date:
