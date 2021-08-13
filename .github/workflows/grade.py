@@ -27,10 +27,8 @@ repository = git.repository(OWNER, REPO)
 
 PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
 print(PROF_WORKS)
-PROF_WORKS = [f for f in repository.directory_contents('') if f[0] == 'lista01'][0][1]
+PROF_WORKS = [f[0] for f in repository.directory_contents('') if f[1].type == 'dir'][0][0]
 print(PROF_WORKS)
-print(dict(PROF_WORKS))
-print(PROF_WORKS.as_dict())
 exit(1)
 
 print(f'PROFESSOR GITHUB: {URI}')
