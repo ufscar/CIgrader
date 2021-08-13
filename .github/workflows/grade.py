@@ -1,7 +1,6 @@
 import re
 import os
 import stat
-import requests
 import json
 import urllib.request
 import github3
@@ -23,13 +22,9 @@ commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
 
 git = github3.GitHub(token=GITHUB_TOKEN)
-repository = git.repository(OWNER, REPO)
+repo = git.repository(OWNER, REPO)
 
-PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
-print(PROF_WORKS)
-PROF_WORKS = [f[0] for f in repository.directory_contents('') if f[1].type == 'dir']
-print(PROF_WORKS)
-exit(1)
+PROF_WORKS = [f[0] for f in repo.directory_contents('') if f[1].type == 'dir']
 
 print(f'PROFESSOR GITHUB: {URI}')
 
@@ -44,7 +39,9 @@ for file in COMMIT_FILES:
     graded.add(work)
     if work not in PROF_WORKS:
         continue
-    prof_files = {r['name']: r["download_url"] for r in requests.get(f'{CONTENTS}/{work}').json()}
+    prof_files = {f[0]: f.links for f in repo.directory_contents(work)}
+    print(prof_files)
+    exit(1)
     if 'due_to.txt' in prof_files:
         date = requests.get(prof_files['due_to.txt']).content
         date = re.search(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', str(date, encoding='utf8'))
