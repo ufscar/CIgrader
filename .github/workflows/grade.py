@@ -39,7 +39,7 @@ for file in COMMIT_FILES:
     graded.add(work)
     if work not in PROF_WORKS:
         continue
-    prof_files = {f[0]: f.links for f in repo.directory_contents(work)}
+    prof_files = {f[0]: f[1].links for f in repo.directory_contents(work)}
     print(prof_files)
     exit(1)
     if 'due_to.txt' in prof_files:
