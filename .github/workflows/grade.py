@@ -64,14 +64,15 @@ for file in COMMIT_FILES:
     urllib.request.urlretrieve(list(prof_files.values())[0], GRADER_EXEC)
     os.chmod(GRADER_EXEC, stat.S_IRWXU)
     log_file = f'{commit_time_string}.txt'
-    log = subprocess.run([f'./{GRADER_EXEC}'], stderr=subprocess.STDOUT).stdout
+    log = subprocess.run([f'./{GRADER_EXEC}'],
+                         stderr=subprocess.STDOUT,
+                         capture_output=True).stdout
     print(log)
     os.remove(GRADER_EXEC)
     repo.create_file(path=os.path.join(work, GRADER_FOLDER, log_file),
                      message=f'task "{work}" grader',
                      content=log
                      )
-    print(log)
     exit(1)
     # log = str(log, encoding='utf8')
     score = json.loads(log.strip().splitlines()[-1])
