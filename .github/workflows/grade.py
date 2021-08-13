@@ -75,16 +75,16 @@ for file in COMMIT_FILES:
     log = str(log, encoding='utf8')
     score = log.strip().splitlines()[-1]
     score_file = os.path.join(GRADER_FOLDER, f'{work}_current_score.txt')
-    contents = repo.file_contents(path=score_file, ref='master')
-    if not contents:
+    try:
+        contents = repo.file_contents(path=score_file)
+        contents.update(message=f'task "{work}" score',
+                        content=bytes(score, encoding='utf8')
+                        )
+    except github3.exceptions.NotFoundError:
         repo.create_file(path=score_file,
                          message=f'task "{work}" score',
                          content=bytes(score, encoding='utf8')
                          )
-    else:
-        contents.update(message=f'task "{work}" score',
-                        content=bytes(score, encoding='utf8')
-                        )
 
     score = json.loads(score)
     score['task'] = work
