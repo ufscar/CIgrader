@@ -4,14 +4,15 @@ import stat
 import requests
 import json
 import urllib.request
-import subprocess
+import github3
 
 from datetime import datetime as dt2
 
 URL = os.getenv('PROF_GITHUB')
 URI = URL.replace('https://github.com/', '')
+OWNER, REPO = URI.split('/')
 CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
-PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
+GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 COMMIT_FILES = json.loads(os.getenv('COMMIT_FILES', "[]"))
 COMMIT_TIME = os.getenv('COMMIT_TIME')
 if COMMIT_TIME is None:
@@ -20,6 +21,15 @@ else:
     COMMIT_TIME = dt2.strptime(json.loads(COMMIT_TIME), "%Y-%m-%dT%H:%M:%SZ")
 commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
+
+git = github3.GitHub(token=GITHUB_TOKEN)
+repository = git.repository(OWNER, REPO)
+
+PROF_WORKS = [r['name'] for r in requests.get(CONTENTS).json() if r['type'] == 'dir']
+print(PROF_WORKS)
+PROF_WORKS = repository.contents
+print(PROF_WORKS)
+exit(1)
 
 print(f'PROFESSOR GITHUB: {URI}')
 
