@@ -27,6 +27,7 @@ commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
 GRADER_FOLDER = 'grader'
 DATE_FILE = 'due_to.txt'
+SCORE_FILE = f'current_score.txt'
 
 git = github3.GitHub(token=GITHUB_TOKEN)
 repo = git.repository(GITHUB_REPOSITORY_OWNER, GITHUB_REPOSITORY_NAME)
@@ -67,20 +68,29 @@ for file in COMMIT_FILES:
     log = subprocess.run([f'./{GRADER_EXEC}'],
                          stdout=subprocess.PIPE,
                          stderr=subprocess.STDOUT).stdout
-    print(log)
     os.remove(GRADER_EXEC)
     repo.create_file(path=os.path.join(work, GRADER_FOLDER, log_file),
                      message=f'task "{work}" grader',
                      content=log
                      )
-    exit(1)
-    # log = str(log, encoding='utf8')
-    score = json.loads(log.strip().splitlines()[-1])
+    log = str(log, encoding='utf8')
+    print(log)
+    score = log.strip().splitlines()[-1]
+    score_file = os.path.join(work, GRADER_FOLDER, SCORE_FILE)
+    contents = repo.file_contents(path=score_file)
+    if not contents:
+        repo.create_file(path=score_file,
+                         message=f'task "{work}" score',
+                         content=bytes(score, encoding='utf8')
+                         )
+    else:
+        contents.update(message=f'task "{work}" score',
+                        content=bytes(score, encoding='utf8')
+                        )
+
+    score = json.loads(score)
     score['task'] = work
     scores.append(score)
     os.chdir(curr)
 
 print(json.dumps(scores))
-
-
-
