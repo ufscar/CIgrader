@@ -24,7 +24,7 @@ Essa variável deve ser definida como `secret` do repositório do estudante:
 3. Dentro da pasta de uma determinada lista, ponha no máximo dois arquivos:
   
     - OPCIONAL: arquivo `due_to.txt` com um `datetime` no formato `YYYY-mm-ddTHH:MM:SS` com a data limite de entrega do trabalho
-    - OBRIGATÓRIO: o executável do corretor (será executado no linux como ./<nome do arquivo>). Caso precise compilar o corretor, uma sugestão para `python`:
+    - OBRIGATÓRIO: o executável do corretor (será executado no linux como ./\<nome do arquivo\>). Caso precise compilar o corretor, uma sugestão para `python`:
   
 ```bash
 pyinstaller --onefile arquivo.py
