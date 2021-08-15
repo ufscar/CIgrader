@@ -21,7 +21,6 @@ else:
     COMMIT_TIME = dt2.strptime(json.loads(COMMIT_TIME), "%Y-%m-%dT%H:%M:%SZ")
 
 URL = os.getenv('PROF_GITHUB')
-CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
 GRADER_FOLDER = 'comments'
@@ -34,6 +33,7 @@ def main():
         return
 
     URI = URL.replace('https://github.com/', '')
+    CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 
     print(f'PROFESSOR GITHUB: {URI}')
 
