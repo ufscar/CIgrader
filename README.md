@@ -12,7 +12,7 @@ Essa variável deve ser definida como `secret` do repositório do estudante:
 ## Instruções ao estudante
 
 1. Importe esse repositório como um repositório privado
-2. Dê permissão de administrador para o professor
+2. Transfira a propriedade do repositório para o professor
 3. Para cada lista, faça uma pasta com o nome da lista, como especificado pelo professor
 4. Dentro da pasta de uma determinada lista, ponha os exercícios conforme especificado pelo professor
 5. A cada modificação que fizer, sua nota aparece na pasta `comments`, na raiz do projeto
