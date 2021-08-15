@@ -35,7 +35,7 @@ def main():
     URI = URL.replace('https://github.com/', '')
     CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 
-    print(f'PROFESSOR GITHUB: {URI}')
+    print(f'PROFESSOR GITHUB: {" ".join(URI.split("/"))}')
 
     git = github3.GitHub(token=GITHUB_TOKEN)
     repo = git.repository(GITHUB_REPOSITORY_OWNER, GITHUB_REPOSITORY_NAME)
