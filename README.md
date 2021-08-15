@@ -7,7 +7,7 @@ Esse repositório deve ser clonado pelo aluno. O repositório do professor não 
 
 Essa variável deve ser definida como `secret` do repositório do estudante:
 
-- **PROF_GITHUB**: Repositório do professor (https://github.com/usuario/repositorio), onde serão fornecidos os executáveis corretores
+- **PROF_GITHUB**: Repositório do professor (https://github.com/usuario/repositorio), onde serão fornecidos os corretores
 
 ## Instruções ao estudante
 
