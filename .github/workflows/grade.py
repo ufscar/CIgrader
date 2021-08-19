@@ -46,13 +46,13 @@ def main():
         return
 
     PROF_TASKS = [f['name'] for f in js if f['type'] == 'dir']
+    COMMIT_TASKS = [file.split('/')[0] for file in COMMIT_FILES]
     if len(PROF_TASKS) == 0:
         return
     if GITHUB_ACTOR == prof_user:
-        tasks_to_grade = set(PROF_TASKS[:])
+        tasks_to_grade = set(t for t in PROF_TASKS if t in COMMIT_TASKS)
     else:
-        tasks_to_grade = set(file.split('/')[0] for file in COMMIT_FILES)
-        tasks_to_grade = set(task for task in tasks_to_grade if task not in PROF_TASKS)
+        tasks_to_grade = set(t for t in COMMIT_TASKS if t in PROF_TASKS)
 
     scores = list()
     for task in tasks_to_grade:
