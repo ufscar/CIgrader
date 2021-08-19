@@ -34,7 +34,7 @@ def main():
 
     URI = URL.replace('https://github.com/', '')
     CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
-    
+
     prof_user, prof_repo = URI.split("/")
     print(f'PROFESSOR GITHUB: {prof_user} {prof_repo}')
 
@@ -50,12 +50,15 @@ def main():
     if len(PROF_TASKS) == 0:
         return
     if GITHUB_ACTOR == prof_user:
-        tasks_to_grade = set(t for t in PROF_TASKS if t in COMMIT_TASKS)
+        tasks_to_grade = set(PROF_TASKS)
     else:
         tasks_to_grade = set(t for t in COMMIT_TASKS if t in PROF_TASKS)
 
+    print(tasks_to_grade)
     scores = list()
     for task in tasks_to_grade:
+        if not os.path.exists(task):
+            continue
         prof_files = {r['name']: r["download_url"] for r in requests.get(f'{CONTENTS}/{task}').json()}
         if DATE_FILE in prof_files:
             date = requests.get(prof_files[DATE_FILE]).content
@@ -107,4 +110,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # regrade
