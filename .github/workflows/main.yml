@@ -38,5 +38,5 @@ jobs:
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
           GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
-          COMMIT_FILES: ${{ steps.files.outputs.added_modified }}
+          COMMIT_FILES: ${{ steps.files.outputs.all }}
         run: /usr/bin/python3 .github/workflows/grade.py
