@@ -9,6 +9,13 @@ import subprocess
 
 from datetime import datetime as dt2
 
+def is_json(s):
+    try:
+        json.loads(s)
+        return True
+    except ValueError:
+        return False
+
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY')
 GITHUB_REPOSITORY_OWNER, GITHUB_REPOSITORY_NAME = GITHUB_REPOSITORY.split('/')
@@ -88,21 +95,23 @@ def main():
         log = str(log, encoding='utf8')
         print(log)
         score = log.strip().splitlines()[-1]
-        score_file = os.path.join(GRADER_FOLDER, f'{task}_current_score.txt')
-        try:
-            contents = repo.file_contents(path=score_file)
-            contents.update(message=f'task "{task}" score',
-                            content=bytes(score, encoding='utf8')
-                            )
-        except github3.exceptions.NotFoundError:
-            repo.create_file(path=score_file,
-                             message=f'task "{task}" score',
-                             content=bytes(score, encoding='utf8')
-                             )
+        if is_json(score):
+            score_file = os.path.join(GRADER_FOLDER, f'{task}_current_score.txt')
+            try:
+                contents = repo.file_contents(path=score_file)
+                contents.update(message=f'task "{task}" score',
+                                content=bytes(score, encoding='utf8')
+                                )
+            except github3.exceptions.NotFoundError:
+                repo.create_file(path=score_file,
+                                 message=f'task "{task}" score',
+                                 content=bytes(score, encoding='utf8')
+                                 )
 
-        score = json.loads(score)
-        score['task'] = task
-        scores.append(score)
+            score = json.loads(score)
+            score['task'] = task
+            scores.append(score)
+
         os.chdir(curr)
 
     print(json.dumps(scores))
