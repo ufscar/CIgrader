@@ -32,7 +32,7 @@ jobs:
           python3 -m pip install requests
           python3 -m pip install github3.py
           # Next are specific when the tasks need
-          apt-get update && apt-get install python3-tk
+          apt-get -y update && apt-get install -y python3-tk
           python3 -m pip install turtle
       - name: Grader
         env:
