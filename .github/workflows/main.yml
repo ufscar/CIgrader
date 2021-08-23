@@ -31,6 +31,8 @@ jobs:
         run: |
           python3 -m pip install requests
           python3 -m pip install github3.py
+          # Next are specific when the tasks need
+          python3 -m pip install turtle
       - name: Grader
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
