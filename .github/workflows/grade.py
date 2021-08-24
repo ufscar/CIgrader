@@ -69,12 +69,14 @@ def main():
         prof_files = {r['name']: r["download_url"] for r in requests.get(f'{CONTENTS}/{task}').json()}
         if DATE_FILE in prof_files:
             date = requests.get(prof_files[DATE_FILE]).content
-            date = re.search(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', str(date, encoding='utf8'))
             del prof_files[DATE_FILE]
-            if date:
-                date = dt2.strptime(date.group(0), "%Y-%m-%dT%H:%M:%S")
-                if COMMIT_TIME > date:
-                    continue
+            if GITHUB_ACTOR != prof_user:
+                date = re.search(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', str(date, encoding='utf8'))
+
+                if date:
+                    date = dt2.strptime(date.group(0), "%Y-%m-%dT%H:%M:%S")
+                    if COMMIT_TIME > date:
+                        continue
         print(f'TASK: {task}')
         if len(prof_files) != 1:
             print('ERROR: invalid number of grader files (warn your professor)')
