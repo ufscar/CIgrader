@@ -35,10 +35,12 @@ jobs:
           apt-get -y update && apt-get install -y python3-tk xvfb
           python3 -m pip install turtle
       - name: Grader
+        uses: GabrielBB/xvfb-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
           GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
           COMMIT_FILES: ${{ steps.files.outputs.all }}
-        run: python3 .github/workflows/grade.py
+        with:
+          run: python3 .github/workflows/grade.py
