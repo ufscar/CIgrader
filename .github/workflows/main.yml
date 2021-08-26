@@ -35,6 +35,7 @@ jobs:
           apt-get -y update && apt-get install -y python3-tk xvfb
           python3 -m pip install turtle
       - name: Grader
+        uses: GabrielBB/xvfb-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
