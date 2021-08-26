@@ -42,4 +42,5 @@ jobs:
           GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
           COMMIT_FILES: ${{ steps.files.outputs.all }}
-        run: python3 .github/workflows/grade.py
+        with:
+          run: python3 .github/workflows/grade.py
