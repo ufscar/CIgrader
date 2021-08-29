@@ -96,7 +96,10 @@ def main():
                          )
         log = str(log, encoding='utf8')
         print(log)
-        score = log.strip().splitlines()[-1]
+        score = log.strip().splitlines()
+        if len(score) == 0:
+            continue
+        score = score[-1]
         if is_json(score):
             score_file = os.path.join(GRADER_FOLDER, f'{task}_current_score.txt')
             try:
