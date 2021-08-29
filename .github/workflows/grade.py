@@ -98,6 +98,7 @@ def main():
         print(log)
         score = log.strip().splitlines()
         if len(score) == 0:
+            print('{"score": 0}')
             continue
         score = score[-1]
         if is_json(score):
