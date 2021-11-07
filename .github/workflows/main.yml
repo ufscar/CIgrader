@@ -6,9 +6,6 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
-    container:
-      image: gldecurtins/chia-docker:latest
-      options: --privileged
     env:
       PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
 
@@ -29,11 +26,10 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          python3 -m pip install requests
-          python3 -m pip install github3.py
+          sudo python3 -m pip install requests
+          sudo python3 -m pip install github3.py
           # Next are specific when the tasks need
-          apt-get -y update && apt-get install -y python3-tk xvfb
-          python3 -m pip install turtle
+          sudo apt-get -y update && sudo apt-get install -y python3-tk xvfb
       - name: Grader
         uses: GabrielBB/xvfb-action@v1
         env:
