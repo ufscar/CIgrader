@@ -6,6 +6,9 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
+    container:
+      image: ufscar/cigrader:ubuntu-20_04
+      options: --privileged
     env:
       PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
 
@@ -22,14 +25,6 @@ jobs:
           script: |
             const commit_details = await github.git.getCommit({owner: context.repo.owner, repo: context.repo.repo, commit_sha: context.sha});
             return commit_details.data.author.date
-      - name: Setup
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: |
-          sudo python3 -m pip install requests
-          sudo python3 -m pip install github3.py
-          # Next are specific when the tasks need
-          sudo apt-get -y update && sudo apt-get install -y python3-tk xvfb
       - name: Grader
         uses: GabrielBB/xvfb-action@v1
         env:
