@@ -91,7 +91,7 @@ def main():
                              stderr=subprocess.STDOUT).stdout
         os.remove(GRADER_EXEC)
         repo.create_file(path=os.path.join(GRADER_FOLDER, log_file),
-                         message=f'task "{task}" grader',
+                         message=f'task "{task}" grader [skip ci]',
                          content=log
                          )
         log = str(log, encoding='utf8')
@@ -104,12 +104,12 @@ def main():
             score_file = os.path.join(GRADER_FOLDER, f'{task}_current_score.txt')
             try:
                 contents = repo.file_contents(path=score_file)
-                contents.update(message=f'task "{task}" score',
+                contents.update(message=f'task "{task}" score [skip ci]',
                                 content=bytes(score, encoding='utf8')
                                 )
             except github3.exceptions.NotFoundError:
                 repo.create_file(path=score_file,
-                                 message=f'task "{task}" score',
+                                 message=f'task "{task}" score [skip ci]',
                                  content=bytes(score, encoding='utf8')
                                  )
 
@@ -124,4 +124,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # regrade all
