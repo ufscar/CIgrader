@@ -39,6 +39,10 @@ def main():
         print('Variable PROF_GITHUB not defined')
         return
 
+    if '***' in URL:
+        print('The grader has no permition to see your secrets')
+        return
+
     URI = URL.replace('https://github.com/', '')
     CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 
@@ -51,7 +55,7 @@ def main():
     js = requests.get(CONTENTS).json()
     if isinstance(js, (str, bytes)):
         return
-
+        
     PROF_TASKS = [f['name'] for f in js if f['type'] == 'dir']
     COMMIT_TASKS = [file.split('/')[0] for file in COMMIT_FILES]
     if len(PROF_TASKS) == 0:
