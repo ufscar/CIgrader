@@ -27,7 +27,7 @@ if COMMIT_TIME is None:
 else:
     COMMIT_TIME = dt2.strptime(json.loads(COMMIT_TIME), "%Y-%m-%dT%H:%M:%SZ")
 
-URL = os.getenv('PROF_GITHUB')
+URL = os.getenv('PROF_GITHUB').strip()
 commit_time_string = COMMIT_TIME.strftime('%Y%m%d%H%M%S')
 GRADER_EXEC = 'grader'
 GRADER_FOLDER = 'comments'
@@ -39,15 +39,11 @@ def main():
         print('Variable PROF_GITHUB not defined')
         return
 
-    if '***' in URL:
-        print('The grader has no permition to see your secrets')
-        return
-
-    URI = URL.replace('https://github.com/', '')
+    URI = URL.replace('https://github.com/', '').strip()
     CONTENTS = f"https://api.github.com/repos/{URI}/contents/"
 
     prof_user, prof_repo = URI.split("/")
-    print(f'PROFESSOR GITHUB: {prof_user} {prof_repo}')
+    print(f'PROFESSOR GITHUB: {prof_user.encode()} {prof_repo.encode()}')
 
     git = github3.GitHub(token=GITHUB_TOKEN)
     repo = git.repository(GITHUB_REPOSITORY_OWNER, GITHUB_REPOSITORY_NAME)
@@ -55,7 +51,7 @@ def main():
     js = requests.get(CONTENTS).json()
     if isinstance(js, (str, bytes)):
         return
-        
+
     PROF_TASKS = [f['name'] for f in js if f['type'] == 'dir']
     COMMIT_TASKS = [file.split('/')[0] for file in COMMIT_FILES]
     if len(PROF_TASKS) == 0:
