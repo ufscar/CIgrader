@@ -26,12 +26,12 @@ jobs:
             const commit_details = await github.git.getCommit({owner: context.repo.owner, repo: context.repo.repo, commit_sha: context.sha});
             return commit_details.data.author.date
       - name: Grader
-        uses: GabrielBB/xvfb-action@v1
+        #uses: coactions/setup-xvfb@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
           GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
           COMMIT_TIME: ${{ steps.author-date.outputs.result }}
           COMMIT_FILES: ${{ steps.files.outputs.all }}
-        with:
-          run: python3 .github/workflows/grade.py
+#        with:
+        run: python3 .github/workflows/grade.py
