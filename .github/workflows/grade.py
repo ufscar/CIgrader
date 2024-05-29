@@ -90,10 +90,17 @@ def main():
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT).stdout
         os.remove(GRADER_EXEC)
-        repo.create_file(path=os.path.join(GRADER_FOLDER, log_file),
-                         message=f'task "{task}" grader [skip ci]',
-                         content=log[:10000000]
-                         )
+        tam = len(log)
+        while True:
+            try:
+                repo.create_file(path=os.path.join(GRADER_FOLDER, log_file),
+                                 message=f'task "{task}" grader [skip ci]',
+                                 content=log[:tam]
+                                )
+                break
+            except Exception as err:
+                print(err)
+                tam = tam * 3 // 4
         log = str(log, encoding='utf8')
         print(log)
         score = log.strip().splitlines()
