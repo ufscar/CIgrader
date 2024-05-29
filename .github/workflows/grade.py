@@ -92,7 +92,7 @@ def main():
         os.remove(GRADER_EXEC)
         repo.create_file(path=os.path.join(GRADER_FOLDER, log_file),
                          message=f'task "{task}" grader [skip ci]',
-                         content=log
+                         content=log[:10000000]
                          )
         log = str(log, encoding='utf8')
         print(log)
