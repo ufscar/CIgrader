@@ -7,7 +7,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: ufscar/cigrader:ubuntu-22_04
+      image: ufscar/cigrader:ubuntu-24_04
       options: --privileged
     env:
       PROF_GITHUB: ${{ secrets.PROF_GITHUB }}
